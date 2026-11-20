@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Skill routing",
+    "description": "Decompose a request, match it to a skill, confirm once, then reuse the mapping. Adds a skill-routing view to the conversation page."
+  }
+}

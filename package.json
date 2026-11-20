@@ -1,0 +1,33 @@
+{
+  "name": "dsh-skill-router",
+  "version": "0.2.4",
+  "private": true,
+  "type": "module",
+  "description": "需求拆解 → 技能匹配 → 一次性确认 → 路由表复用的 DSH 技能，外加对话页「skill路由」视图。",
+  "keywords": ["deepseek-harness", "dsh", "dsh-plugin", "skill", "router"],
+  "license": "MIT",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "skills/**/SKILL.md",
+    "assets",
+    "locale/*.json",
+    "icon.svg",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": ["@deepseek-ai/dsh-client-ui-conversation"]
+    }
+  }
+}
