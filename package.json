@@ -1,7 +1,7 @@
 {
-  "name": "dsh-skill-router",
-  "version": "0.4.2",
-  "private": true,
+  "name": "@renzenggang/dsh-skill-router",
+  "version": "0.5.0",
+  "private": false,
   "type": "module",
   "description": "DSH bundle: decide which skill handles a request, confirm once, then reuse. Ships a Skills view with per-turn skill paths, ratings and GitHub star links.",
   "keywords": [
@@ -53,5 +53,8 @@
   "scripts": {
     "test": "node test/collect.test.mjs && node test/render.test.mjs",
     "pack": "npm pack"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
