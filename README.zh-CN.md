@@ -37,13 +37,13 @@
 
 ## 安装
 
-要求 DSH `0.2.2`。
+要求 DSH `0.2.2`。先 **[下载最新发布](https://github.com/renzg/dsh-skill-router/releases/latest)**（`dsh-skill-router-0.4.1.tgz`），然后：
 
 ```bash
-dsh plugin --profile desktop add /path/to/dsh-skill-router-0.3.0.tgz
+dsh plugin --profile desktop add dsh-skill-router-0.4.1.tgz
 ```
 
-或在 设置 → 插件 → 添加插件 里选择这个 tarball。
+或在 设置 → 插件 → 添加插件 里选择这个 tarball。想自己打：在仓库根目录跑 `npm pack`。
 
 ## 「技能」视图
 

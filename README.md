@@ -37,13 +37,13 @@ Two problems it solves: newcomers cannot tell which of the many installed skills
 
 ## Install
 
-Requires DSH `0.2.2`.
+Requires DSH `0.2.2`. **[Download the latest release](https://github.com/renzg/dsh-skill-router/releases/latest)** (`dsh-skill-router-0.4.1.tgz`), then:
 
 ```bash
-dsh plugin --profile desktop add /path/to/dsh-skill-router-0.3.0.tgz
+dsh plugin --profile desktop add dsh-skill-router-0.4.1.tgz
 ```
 
-Or use **Settings → Plugins → Add plugin** and point it at the tarball.
+Or use **Settings → Plugins → Add plugin** and point it at the tarball. To build it yourself: `npm pack` in the repository root.
 
 ## The Skills view
 
