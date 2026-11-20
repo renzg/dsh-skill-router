@@ -28,6 +28,7 @@
     "locale/*.json",
     "icon.svg",
     "README.md",
+    "CHANGELOG.md",
     "README.zh-CN.md"
   ],
   "dsh": {

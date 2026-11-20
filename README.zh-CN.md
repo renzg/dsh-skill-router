@@ -81,6 +81,8 @@ node test/collect.test.mjs   # 折叠逻辑：轮次、状态、复用
 node test/render.test.mjs    # 渲染冒烟：布局、评分、Star 链接、空态
 ```
 
+版本变更见 [CHANGELOG.md](CHANGELOG.md)。
+
 ## 发布
 
 打 tag，并把仓库挂到 `dsh-plugin` topic 下：

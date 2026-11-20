@@ -81,6 +81,8 @@ node test/collect.test.mjs   # folding logic: turns, statuses, reuse
 node test/render.test.mjs    # render smoke: layout, ratings, star link, empty states
 ```
 
+See [CHANGELOG.md](CHANGELOG.md) for the version history.
+
 ## Publish
 
 Tag a release and list the repository under the `dsh-plugin` topic:
