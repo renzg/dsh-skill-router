@@ -4,6 +4,8 @@
 
 A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH) bundle that decides **which skill should handle a request**, asks you once, and remembers the answer.
 
+Part of the [`dsh-plugin`](https://github.com/topics/dsh-plugin) ecosystem — skill, panel and installer in one bundle.
+
 Two problems it solves: newcomers cannot tell which of the many installed skills fits a task, and experienced users cannot tell whether the skill they picked actually solves it. This bundle makes the decision explicit, then reuses it.
 
 ## What is in the bundle
