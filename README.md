@@ -79,6 +79,15 @@ node test/collect.test.mjs   # folding logic: turns, statuses, reuse
 node test/render.test.mjs    # render smoke: layout, ratings, star link, empty states
 ```
 
+## Publish
+
+Tag a release and list the repository under the `dsh-plugin` topic:
+
+```bash
+git tag -a v0.4.1 -m "dsh-skill-router 0.4.1" && git push origin v0.4.1
+./scripts/set-topics.sh            # needs one `gh auth login` or GITHUB_TOKEN
+```
+
 ## License
 
 MIT © 2026 renzg

@@ -79,6 +79,15 @@ node test/collect.test.mjs   # 折叠逻辑：轮次、状态、复用
 node test/render.test.mjs    # 渲染冒烟：布局、评分、Star 链接、空态
 ```
 
+## 发布
+
+打 tag，并把仓库挂到 `dsh-plugin` topic 下：
+
+```bash
+git tag -a v0.4.1 -m "dsh-skill-router 0.4.1" && git push origin v0.4.1
+./scripts/set-topics.sh            # 需要一次 gh auth login 或 GITHUB_TOKEN
+```
+
 ## 许可
 
 MIT © 2026 renzg
