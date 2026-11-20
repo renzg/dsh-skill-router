@@ -6,7 +6,7 @@
 
 属于 [`dsh-plugin`](https://github.com/topics/dsh-plugin) 生态 —— 一个 bundle 里装好技能、面板与安装器。
 
-它解决两个问题：新手面对一堆 skill 不知道选哪个；老手不确定选中的 skill 是否真能解决。这个 bundle 把这次判断显式化，然后复用。
+它解决两个问题：新手面对一堆 skill 不知道选哪个；老手不确定选中的 skill 是否真能解决问题。这个 bundle 把这次判断显式化，然后复用。
 
 ## 包里有什么
 
