@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url'
 export const name = 'skill-router'
 export const inject = ['skills']
 
-const PROVIDER = 'skill-router'
+const PROVIDER = 'dsh-skill-router'
 const SKILL_PATH = fileURLToPath(new URL('./skills/skill-router/SKILL.md', import.meta.url))
 const ASSETS = fileURLToPath(new URL('./assets/', import.meta.url))
 const DSH_HOME = process.env.DSH_HOME || join(homedir(), '.dsh')
@@ -41,7 +41,7 @@ async function candidate() {
   const raw = await readFile(SKILL_PATH, 'utf8')
   const meta = readFrontmatter(raw)
   return {
-    name: meta.name || 'skill-router',
+    name: meta.name || 'dsh-skill-router',
     description: meta.description || '需求拆解与技能路由。',
     invocation: { modelInvocable: true, userInvocable: true },
     provider: PROVIDER,

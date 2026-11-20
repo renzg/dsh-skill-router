@@ -7,7 +7,14 @@ import assert from 'node:assert/strict'
 
 const here = dirname(fileURLToPath(import.meta.url))
 let factory = null
-globalThis.window = { __ModuleLoader__: { load: (definition) => { factory = definition.factory } } }
+globalThis.window = {
+  __ModuleLoader__: { load: (definition) => { factory = definition.factory } },
+  // The panel reads ratings at mount; seed one 👍 so the star link can be asserted.
+  localStorage: {
+    getItem: () => JSON.stringify({ 'dsh-skill-router': { up: 1, down: 0, mine: 'up' } }),
+    setItem: () => {},
+  },
+}
 new Function(readFileSync(join(here, '..', 'client.js'), 'utf8'))()
 
 const ReactStub = {
@@ -39,7 +46,7 @@ const snapshot = {
     {
       kind: 'assistant', seq: 2, turn: 1, step: 1, time: at('2026-11-20T20:29:00+08:00'),
       blocks: [
-        { kind: 'tool-call', callId: 'c1', name: 'skill', argsRaw: '{"name":"skill-router"}' },
+        { kind: 'tool-call', callId: 'c1', name: 'skill', argsRaw: '{"name":"dsh-skill-router"}' },
         { kind: 'tool-call', callId: 'c2', name: 'skill', argsRaw: '{"name":"office-xlsx"}' },
         { kind: 'tool-call', callId: 'c3', name: 'skill', argsRaw: '{"name":"office-xlsx"}' },
         { kind: 'tool-call', callId: 'c4', name: 'skill', argsRaw: '{"name":"univer"}' },
@@ -68,7 +75,9 @@ assert.ok(texts.includes('本轮最常用'), 'top block renders')
 
 const buttons = flat.filter((n) => n.type === 'button')
 assert.equal(buttons.length, 6, 'three distinct skills x two vote buttons')
-assert.ok(buttons.every((b) => b.props['aria-pressed'] === 'false'))
+const pressed = buttons.filter((b) => b.props['aria-pressed'] === 'true')
+assert.equal(pressed.length, 1, 'the seeded vote shows as pressed')
+assert.equal(pressed[0].props['aria-label'], '标记 dsh-skill-router 好用，当前 1 票')
 assert.ok(buttons.some((b) => b.props['aria-label'] === '标记 office-xlsx 好用，当前 0 票'))
 assert.ok(flat.some((n) => n.type === 'style'), 'component styles are rendered as an element')
 
@@ -91,6 +100,13 @@ assert.equal(cards[0].children.length, 2, 'card is exactly header + request now'
 assert.equal(cards[0].children[1].children[0], '跑一遍试试', 'request stays on its own line')
 const chips = flat.filter((n) => typeof n.props?.title === 'string' && n.props.title.includes(' · '))
 assert.equal(chips.length, 4, 'all four skill chips sit in the header row (office-xlsx appears twice)')
+
+// --- 👍 on a skill with a known repo exposes the GitHub star link ------
+const stars = flat.filter((n) => n.type === 'a' && n.props?.className === 'sr-star')
+assert.equal(stars.length, 1, 'only the up-voted skill with a known repo gets a star link')
+assert.equal(stars[0].props.href, 'https://github.com/renzg/skill-router')
+assert.equal(stars[0].props.target, '_blank')
+assert.ok(stars[0].props.rel.includes('noreferrer'), 'external link is isolated')
 
 // Empty session must not render the top block.
 const empty = SkillRouterView({ store: { isReady: () => true, getSnapshot: () => ({ eventNodes: [], runningCalls: [] }), subscribe: () => () => {} } })

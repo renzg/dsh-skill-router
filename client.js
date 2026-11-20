@@ -118,6 +118,23 @@ window.__ModuleLoader__.load({
 
     const RATINGS_KEY = 'skill-router.ratings.v1'
 
+    /** Skills whose home repository is known, so a 👍 can point the user at GitHub. */
+    const SKILL_REPOS = {
+      'dsh-skill-router': 'renzg/skill-router',
+      office: 'dream-num/dsh-univer-office',
+      'office-docx': 'dream-num/dsh-univer-office',
+      'office-pptx': 'dream-num/dsh-univer-office',
+      'office-xlsx': 'dream-num/dsh-univer-office',
+      univer: 'dream-num/dsh-univer-office',
+      'univer-base': 'dream-num/dsh-univer-office',
+      'univer-board': 'dream-num/dsh-univer-office',
+      'univer-cross-unit-formula': 'dream-num/dsh-univer-office',
+      'univer-doc': 'dream-num/dsh-univer-office',
+      'univer-embed': 'dream-num/dsh-univer-office',
+      'univer-sheet': 'dream-num/dsh-univer-office',
+      'univer-slide': 'dream-num/dsh-univer-office',
+    }
+
     /** Ratings are per browser profile, so they accumulate across every session. */
     function readRatings() {
       try {
@@ -264,6 +281,8 @@ window.__ModuleLoader__.load({
       '.sr-vote:focus-visible{outline:2px solid var(--dsw-alias-brand-primary);outline-offset:1px}',
       '.sr-up[aria-pressed="true"]{border-color:var(--dsw-alias-state-success-primary);color:var(--dsw-alias-state-success-primary)}',
       '.sr-down[aria-pressed="true"]{border-color:var(--dsw-alias-state-error-primary);color:var(--dsw-alias-state-error-primary)}',
+      '.sr-star{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;border:1px solid var(--dsw-alias-brand-primary);color:var(--dsw-alias-brand-primary);background:transparent;font:inherit;font-size:11.5px;line-height:1.5;text-decoration:none;white-space:nowrap}',
+      '.sr-star:hover{background:var(--dsw-alias-bg-layer-2)}',
     ].join('\n')
 
     function TopSkills(props) {
@@ -273,6 +292,7 @@ window.__ModuleLoader__.load({
       if (rows.length === 0) return null
       const items = rows.map((row, index) => {
         const rating = ratings[row.skill] || { up: 0, down: 0, mine: null }
+        const repo = SKILL_REPOS[row.skill]
         return h('div', {
           key: row.skill,
           style: { display: 'flex', alignItems: 'center', gap: 8, padding: '3px 0' },
@@ -307,6 +327,15 @@ window.__ModuleLoader__.load({
             title: '不好用',
             onClick: () => vote(row.skill, 'down'),
           }, '👎 ', String(rating.down)),
+          repo !== undefined && rating.mine === 'up'
+            ? h('a', {
+              href: 'https://github.com/' + repo,
+              target: '_blank',
+              rel: 'noreferrer noopener',
+              className: 'sr-star',
+              title: '在 GitHub 给 ' + repo + ' 加星',
+            }, '⭐ Star')
+            : null,
         )
       })
       return h('div', {
