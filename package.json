@@ -1,6 +1,6 @@
 {
-  "name": "@renzenggang/dsh-skill-router",
-  "version": "0.5.0",
+  "name": "@zhiyu.pub/dsh-skill-router",
+  "version": "0.5.1",
   "private": false,
   "type": "module",
   "description": "DSH bundle: decide which skill handles a request, confirm once, then reuse. Ships a Skills view with per-turn skill paths, ratings and GitHub star links.",

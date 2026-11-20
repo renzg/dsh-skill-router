@@ -1,5 +1,5 @@
 window.__ModuleLoader__.load({
-  id: '@renzenggang/dsh-skill-router',
+  id: '@zhiyu.pub/dsh-skill-router',
   factory(require) {
     const React = require('react')
     const h = React.createElement
