@@ -15,6 +15,16 @@ Two problems it solves: newcomers cannot tell which of the many installed skills
 | `assets/` | `routes.md` template and `log.py`; copied into `$DSH_HOME/skill-router/` on first install, never overwriting |
 | `index.js` | Host half: publishes the skill through `ctx.skills.registerProvider` and seeds the state directory |
 
+## Demo
+
+**Skills view** — drops into the conversation page next to Trajectory and Context. One card per turn, the skill path on the title row, and the five most-used skills of the session on top with cumulative ratings. *(rendered with sample data)*
+
+![Skills view in the conversation page](docs/skills-panel.png)
+
+**Execution log** — `log.py render` turns `log.jsonl` into a standalone page: every request, the decision it took, the skills it loaded and what came out. *(sample data)*
+
+![Execution log dashboard](docs/execution-log.png)
+
 ## How routing works
 
 1. **Decompose** — artifact, object, verb, hard constraints, scale, the one ambiguity that could change the choice.

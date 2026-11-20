@@ -15,6 +15,16 @@
 | `assets/` | `routes.md` 模板与 `log.py`；首次安装时复制到 `$DSH_HOME/skill-router/`，不覆盖已有数据 |
 | `index.js` | 宿主侧：通过 `ctx.skills.registerProvider` 发布技能，并初始化状态目录 |
 
+## 演示
+
+**「技能」视图** —— 挂在对话页 轨迹 / 上下文 旁边：每轮一张卡，路径在标题行，顶部是本轮最常用的 5 个 skill 与跨会话累计评价。（示例数据渲染）
+
+![对话页里的「技能」视图](docs/skills-panel.png)
+
+**执行日志** —— `log.py render` 把 `log.jsonl` 变成独立页面：每次请求、做了什么决策、加载了哪些 skill、产出了什么。（示例数据）
+
+![技能执行日志看板](docs/execution-log.png)
+
 ## 路由怎么走
 
 1. **拆解** —— 交付物、对象、动作、硬约束、规模，以及唯一那个会改变选择的歧义点。

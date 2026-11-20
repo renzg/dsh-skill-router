@@ -121,7 +121,7 @@ TEMPLATE = Template("""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>技能执行日志 · skill-router</title>
+<title>技能执行日志 · dsh-skill-router</title>
 <style>
 :root{--ink:#111827;--ink2:#4B5563;--ink3:#9CA3AF;--line:#E5E7EB;--bg:#F4F5F7;--card:#fff;--accent:#1E3A5F;
 --hit:#047857;--hitbg:#D1FAE5;--first:#B45309;--firstbg:#FEF3C7;--newc:#1D4ED8;--newbg:#DBEAFE;--nonec:#B91C1C;--nonebg:#FEE2E2}
@@ -212,7 +212,7 @@ footer code{font-family:ui-monospace,Menlo,monospace;background:#EDEFF2;padding:
     <span class="mono">虚线框 = 跳板 skill；灰色 = 已在上下文、未重复加载</span>
   </div>
 
-  <footer>由 <code>skill-router</code> 记录 · 重跑渲染：<code>python3 ~/.dsh/skill-router/log.py render --out 文件.html</code></footer>
+  <footer>由 <code>dsh-skill-router</code> 记录 · 重跑渲染：<code>python3 ~/.dsh/skill-router/log.py render --out 文件.html</code></footer>
 </div>
 </body>
 </html>

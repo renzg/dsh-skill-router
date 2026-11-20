@@ -120,7 +120,7 @@ window.__ModuleLoader__.load({
 
     /** Skills whose home repository is known, so a 👍 can point the user at GitHub. */
     const SKILL_REPOS = {
-      'dsh-skill-router': 'renzg/skill-router',
+      'dsh-skill-router': 'renzg/dsh-skill-router',
       office: 'dream-num/dsh-univer-office',
       'office-docx': 'dream-num/dsh-univer-office',
       'office-pptx': 'dream-num/dsh-univer-office',

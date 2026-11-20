@@ -1,6 +1,6 @@
 {
   "name": "dsh-skill-router",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "type": "module",
   "description": "DSH bundle: decide which skill handles a request, confirm once, then reuse. Ships a Skills view with per-turn skill paths, ratings and GitHub star links.",
@@ -24,6 +24,7 @@
     "cordis.patch.yml",
     "skills/**/SKILL.md",
     "assets",
+    "docs",
     "locale/*.json",
     "icon.svg",
     "README.md",
@@ -43,10 +44,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/renzg/skill-router.git"
+    "url": "git+ssh://git@github.com/renzg/dsh-skill-router.git"
   },
-  "homepage": "https://github.com/renzg/skill-router#readme",
+  "homepage": "https://github.com/renzg/dsh-skill-router#readme",
   "bugs": {
-    "url": "https://github.com/renzg/skill-router/issues"
+    "url": "https://github.com/renzg/dsh-skill-router/issues"
   }
 }
