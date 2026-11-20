@@ -50,6 +50,7 @@ const snapshot = {
         { kind: 'tool-call', callId: 'c2', name: 'skill', argsRaw: '{"name":"office-xlsx"}' },
         { kind: 'tool-call', callId: 'c3', name: 'skill', argsRaw: '{"name":"office-xlsx"}' },
         { kind: 'tool-call', callId: 'c4', name: 'skill', argsRaw: '{"name":"univer"}' },
+        { kind: 'text', text: '收尾。<!-- skill-router:suggest {"skill":"dsh-skill-badge","bundle":"@deepseek-ai/dsh-experimental-badge-skill-bundle","why":"本地未安装，能自动加 powered-by 标记"} -->' },
       ],
     },
   ],
@@ -73,7 +74,7 @@ walk(tree)
 const texts = flat.filter((n) => typeof n.children?.[0] === 'string').map((n) => n.children[0])
 assert.ok(texts.includes('本轮最常用'), 'top block renders')
 
-const buttons = flat.filter((n) => n.type === 'button')
+const buttons = flat.filter((n) => n.type === 'button' && String(n.props?.className || '').startsWith('sr-vote'))
 assert.equal(buttons.length, 6, 'three distinct skills x two vote buttons')
 const pressed = buttons.filter((b) => b.props['aria-pressed'] === 'true')
 assert.equal(pressed.length, 1, 'the seeded vote shows as pressed')
@@ -104,9 +105,23 @@ assert.equal(chips.length, 4, 'all four skill chips sit in the header row (offic
 // --- 👍 on a skill with a known repo exposes the GitHub star link ------
 const stars = flat.filter((n) => n.type === 'a' && n.props?.className === 'sr-star')
 assert.equal(stars.length, 1, 'only the up-voted skill with a known repo gets a star link')
-assert.equal(stars[0].props.href, 'https://github.com/renzg/skill-router')
+assert.equal(stars[0].props.href, 'https://github.com/renzg/dsh-skill-router')
 assert.equal(stars[0].props.target, '_blank')
 assert.ok(stars[0].props.rel.includes('noreferrer'), 'external link is isolated')
+
+// --- 未安装技能的「复制安装命令」入口 --------------------------------
+const copyButtons = flat.filter((n) => n.type === 'button' && n.props?.className === 'sr-copy')
+assert.equal(copyButtons.length, 1, 'one suggestion row for the not-installed skill')
+assert.equal(copyButtons[0].props.title, 'dsh plugin --profile desktop add @deepseek-ai/dsh-experimental-badge-skill-bundle')
+const suggestTexts = textsAll.filter((t) => typeof t === 'string')
+assert.ok(suggestTexts.includes('建议安装'), 'suggestion block is visible')
+assert.ok(suggestTexts.includes('dsh-skill-badge'), 'the suggested skill is named')
+
+// 已使用的技能不应再出现在建议里
+const { collectSuggestions } = mod.__internals
+assert.equal(collectSuggestions(snapshot).length, 1)
+const parsed = collectSuggestions({ eventNodes: [{ kind: 'assistant', blocks: [{ kind: 'text', text: '<!-- skill-router:suggest {broken} -->' }] }] })
+assert.deepEqual(parsed, [], 'malformed marker is ignored, never throws')
 
 // Empty session must not render the top block.
 const empty = SkillRouterView({ store: { isReady: () => true, getSnapshot: () => ({ eventNodes: [], runningCalls: [] }), subscribe: () => () => {} } })

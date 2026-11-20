@@ -45,6 +45,31 @@ description: 需求拆解 + 技能匹配 + 一次性确认。当用户提出需�
 
 ## 第 2 步：匹配（宁缺毋滥）
 
+### 先查官方目录，再查本地
+
+匹配前先回答两个问题，别只盯着当前目录：
+
+1. **官方有没有这类技能？** `plugin_manager list_bundles` 看 `official: true` 的条目与它们的 `installed` 状态；要按名字找官方 skill 包，就查 npm：`curl -s "https://registry.npmjs.org/-/v1/search?text=@deepseek-ai/dsh-skill&size=20"`。官方 skill 随 bundle 分发，没有独立的技能仓库索引。
+2. **本地装了吗？** 三处都看：`ls ~/.dsh/skills`（用户级）、已装包里 `<packageDir>/skills/`（bundle 自带）、`plugin_manager list_plugins`（loader 里是否 active）。
+
+**判定分流**：
+- 官方有、本地有 → 正常匹配。
+- 官方有、本地没有 → 先说明"这个能解决，但你没装"，并给出安装命令；用户同意就用 `plugin_manager install_bundle`（传 bundle 名或 tgz），装完继续。
+- 官方没有、本地没有 → 不编造，按 0 匹配处理。
+
+### 让面板显示安装入口
+
+发现"官方有、本地没有"时，在回复里附一段**对用户不可见**的标记，`技能` 面板会把它渲染成带「复制安装命令」的一行：
+
+```html
+<!-- skill-router:suggest {"skill":"dsh-skill-badge","bundle":"@deepseek-ai/dsh-experimental-badge-skill-bundle","why":"本地未安装，能给产出物自动加 powered-by 标记"} -->
+```
+
+规则：
+- 只在**确认未安装**时打；装好并开始用之后不要再打。
+- 一条技能只打一次；`bundle` 填真正能装的那个包名，填错等于给用户一条坏命令。
+- 面板靠"本轮是否用过该技能"过滤，所以历史里残留的旧标记在你用过该技能后会自动消失；没用过就会一直显示——别乱打。
+
 候选来源：**会话里的 available_skills 目录是权威**。只在两种情况下去磁盘核对：
 - 用户说"我刚装了某个 skill"
 - 目录明显缺项（例如刚被提示需要某种能力）

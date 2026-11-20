@@ -188,6 +188,43 @@ window.__ModuleLoader__.load({
         .slice(0, typeof limit === 'number' ? limit : 5)
     }
 
+    /** Markers the routing skill leaves in a reply when a better skill exists but is not installed. */
+    const SUGGEST_RE = /<!--\s*skill-router:suggest\s*(\{[\s\S]*?\})\s*-->/g
+
+    function collectSuggestions(snapshot) {
+      const nodes = snapshot && Array.isArray(snapshot.eventNodes) ? snapshot.eventNodes : []
+      const out = []
+      const seen = new Set()
+      for (const node of nodes) {
+        if (!node || node.kind !== 'assistant' || !Array.isArray(node.blocks)) continue
+        for (const block of node.blocks) {
+          if (!block || block.kind !== 'text' || typeof block.text !== 'string') continue
+          SUGGEST_RE.lastIndex = 0
+          let match
+          while ((match = SUGGEST_RE.exec(block.text)) !== null) {
+            try {
+              const value = JSON.parse(match[1])
+              if (!value || typeof value.skill !== 'string' || value.skill.length === 0) continue
+              if (seen.has(value.skill)) continue
+              seen.add(value.skill)
+              out.push({
+                skill: value.skill,
+                bundle: typeof value.bundle === 'string' ? value.bundle : '',
+                why: typeof value.why === 'string' ? value.why : '',
+              })
+            } catch (error) {
+              /* a malformed marker must never break the panel */
+            }
+          }
+        }
+      }
+      return out
+    }
+
+    function installCommand(bundle) {
+      return bundle ? 'dsh plugin --profile desktop add ' + bundle : ''
+    }
+
     function clockOf(time) {
       if (typeof time !== 'number' || time <= 0) return '--:--'
       const date = new Date(time)
@@ -283,6 +320,9 @@ window.__ModuleLoader__.load({
       '.sr-down[aria-pressed="true"]{border-color:var(--dsw-alias-state-error-primary);color:var(--dsw-alias-state-error-primary)}',
       '.sr-star{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;border:1px solid var(--dsw-alias-brand-primary);color:var(--dsw-alias-brand-primary);background:transparent;font:inherit;font-size:11.5px;line-height:1.5;text-decoration:none;white-space:nowrap}',
       '.sr-star:hover{background:var(--dsw-alias-bg-layer-2)}',
+      '.sr-copy{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;border:1px solid var(--dsw-alias-border-l2);background:transparent;color:var(--dsw-alias-label-primary);font:inherit;font-size:11.5px;line-height:1.5;cursor:pointer;white-space:nowrap}',
+      '.sr-copy:hover{background:var(--dsw-alias-bg-layer-2)}',
+      '.sr-cmd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--dsw-alias-label-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
     ].join('\n')
 
     function TopSkills(props) {
@@ -355,6 +395,58 @@ window.__ModuleLoader__.load({
       )
     }
 
+    function Suggestions(props) {
+      const rows = props.rows
+      const [copied, setCopied] = React.useState('')
+      if (rows.length === 0) return null
+      const copy = (skill, command) => {
+        try {
+          const pending = navigator.clipboard.writeText(command)
+          if (pending && typeof pending.then === 'function') {
+            pending.then(() => setCopied(skill)).catch(() => setCopied(''))
+          } else {
+            setCopied(skill)
+          }
+        } catch (error) {
+          setCopied('')
+        }
+      }
+      const items = rows.map((row) => {
+        const command = installCommand(row.bundle)
+        return h('div', { key: row.skill, style: { padding: '4px 0' } },
+          h('div', { style: { display: 'flex', alignItems: 'center', gap: 8 } },
+            h('span', {
+              title: row.skill,
+              style: { flex: '1 1 auto', minWidth: 0, fontFamily: MONO, fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+            }, row.skill),
+            command.length > 0
+              ? h('button', {
+                type: 'button',
+                className: 'sr-copy',
+                title: command,
+                onClick: () => copy(row.skill, command),
+              }, copied === row.skill ? '已复制' : '复制安装命令')
+              : h('span', { className: 'sr-cmd' }, '需在插件市场安装'),
+          ),
+          row.why.length > 0
+            ? h('div', { style: { color: C.secondary, fontSize: 11.5, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, row.why)
+            : null,
+          command.length > 0
+            ? h('div', { className: 'sr-cmd', style: { marginTop: 2 }, title: command }, command)
+            : null,
+        )
+      })
+      return h('div', {
+        style: { border: '1px dashed ' + C.brand, borderRadius: 10, background: C.layer1, padding: '10px 12px', marginBottom: 12 },
+      },
+        h('div', { style: { display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 } },
+          h('div', { style: { fontSize: 12.5, fontWeight: 600 } }, '建议安装'),
+          h('div', { style: { color: C.secondary, fontSize: 11.5 } }, '本轮匹配到、但本地没有的技能'),
+        ),
+        items,
+      )
+    }
+
     function SkillRouterView(props) {
       const store = props.store
       const subscribe = React.useCallback((listener) => (store ? store.subscribe(listener) : () => {}), [store])
@@ -394,6 +486,15 @@ window.__ModuleLoader__.load({
         setRatings((all) => applyVote(all, skill, kind))
       }, [])
       const top = React.useMemo(() => topSkills(groups, 5), [groups])
+      const suggestions = React.useMemo(() => {
+        const used = new Set()
+        for (const group of groups) for (const entry of group.skills) used.add(entry.skill)
+        try {
+          return collectSuggestions(snapshot).filter((row) => used.has(row.skill) === false)
+        } catch (error) {
+          return []
+        }
+      }, [snapshot, groups])
 
       const rows = groups.map((group) => h(TurnCard, { key: 'group-' + group.id, group }))
 
@@ -438,6 +539,7 @@ window.__ModuleLoader__.load({
         h('div', { style: { color: C.secondary, fontSize: 11.5, lineHeight: 1.7, marginBottom: 12 } },
           '按加载顺序排列；「复用」＝ 更早的请求已加载过；虚线 ＝ 尚未结束；红点 ＝ 该次调用报错。'),
         top.length > 0 ? h(TopSkills, { rows: top, ratings, vote }) : null,
+        h(Suggestions, { rows: suggestions }),
         body,
       )
     }
@@ -524,7 +626,7 @@ window.__ModuleLoader__.load({
           inject: (sessionId) => ({ store: storeFor(sessionId) }),
         }, SkillRouterView))
       },
-      __internals: { collect, skillOf, textOf, topSkills, applyVote, readRatings },
+      __internals: { collect, skillOf, textOf, topSkills, applyVote, readRatings, collectSuggestions, installCommand },
     }
   },
 })

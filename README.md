@@ -49,6 +49,7 @@ Or use **Settings → Plugins → Add plugin** and point it at the tarball.
 - Path chips show status: solid green settled, dashed running or unresolved, red errored, `复用` when the skill was already loaded by an earlier turn.
 - Top block lists the five most-used skills of this session with cumulative 👍 / 👎 counts.
 - Rating one click per skill per browser profile: clicking the same side withdraws the vote, switching sides moves it. Ratings live in `localStorage`, so they accumulate across sessions on this machine but do not follow you to another device.
+- When routing finds a skill that exists officially but is not installed, the reply carries an invisible marker and the panel renders a **建议安装** row with the exact install command and a copy button. The panel cannot read your installed set, so the check itself is the agent's job; the panel only offers the action.
 - After a 👍, a skill with a known repository shows a **⭐ Star** link. Starring itself is a deliberate click: the panel cannot write to GitHub on your behalf, and pretending otherwise would be worse than one honest click.
 
 ## State
