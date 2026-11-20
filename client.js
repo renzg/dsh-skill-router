@@ -210,6 +210,7 @@ window.__ModuleLoader__.load({
               out.push({
                 skill: value.skill,
                 bundle: typeof value.bundle === 'string' ? value.bundle : '',
+                desc: typeof value.desc === 'string' ? value.desc : '',
                 why: typeof value.why === 'string' ? value.why : '',
               })
             } catch (error) {
@@ -428,8 +429,17 @@ window.__ModuleLoader__.load({
               }, copied === row.skill ? '已复制' : '复制安装命令')
               : h('span', { className: 'sr-cmd' }, '需在插件市场安装'),
           ),
+          row.desc.length > 0
+            ? h('div', {
+              title: row.desc,
+              style: { color: C.primary, fontSize: 12, lineHeight: 1.5, marginTop: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' },
+            }, row.desc)
+            : null,
           row.why.length > 0
-            ? h('div', { style: { color: C.secondary, fontSize: 11.5, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, row.why)
+            ? h('div', {
+              title: row.why,
+              style: { color: C.secondary, fontSize: 11.5, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+            }, row.why)
             : null,
           command.length > 0
             ? h('div', { className: 'sr-cmd', style: { marginTop: 2 }, title: command }, command)
@@ -441,7 +451,7 @@ window.__ModuleLoader__.load({
       },
         h('div', { style: { display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 } },
           h('div', { style: { fontSize: 12.5, fontWeight: 600 } }, '建议安装'),
-          h('div', { style: { color: C.secondary, fontSize: 11.5 } }, '本轮匹配到、但本地没有的技能'),
+          h('div', { style: { color: C.secondary, fontSize: 11.5 } }, '本轮匹配到、但本地没有的技能 · 简介取自官方'),
         ),
         items,
       )

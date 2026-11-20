@@ -50,7 +50,7 @@ const snapshot = {
         { kind: 'tool-call', callId: 'c2', name: 'skill', argsRaw: '{"name":"office-xlsx"}' },
         { kind: 'tool-call', callId: 'c3', name: 'skill', argsRaw: '{"name":"office-xlsx"}' },
         { kind: 'tool-call', callId: 'c4', name: 'skill', argsRaw: '{"name":"univer"}' },
-        { kind: 'text', text: '收尾。<!-- skill-router:suggest {"skill":"dsh-skill-badge","bundle":"@deepseek-ai/dsh-experimental-badge-skill-bundle","why":"本地未安装，能自动加 powered-by 标记"} -->' },
+        { kind: 'text', text: '收尾。<!-- skill-router:suggest {"skill":"dsh-skill-badge","desc":"给文档/PR 等产出物自动加上 powered-by DSH 标记","bundle":"@deepseek-ai/dsh-experimental-badge-skill-bundle","why":"本地未安装，能自动加 powered-by 标记"} -->' },
       ],
     },
   ],
@@ -116,6 +116,12 @@ assert.equal(copyButtons[0].props.title, 'dsh plugin --profile desktop add @deep
 const suggestTexts = textsAll.filter((t) => typeof t === 'string')
 assert.ok(suggestTexts.includes('建议安装'), 'suggestion block is visible')
 assert.ok(suggestTexts.includes('dsh-skill-badge'), 'the suggested skill is named')
+assert.ok(suggestTexts.includes('给文档/PR 等产出物自动加上 powered-by DSH 标记'), 'the official blurb is shown so the skill is recognisable')
+assert.ok(suggestTexts.includes('本地未安装，能自动加 powered-by 标记'), 'the request-specific reason stays separate')
+// 标记缺 desc 时不能崩，也不能显示空行
+const noDesc = mod.__internals.collectSuggestions({ eventNodes: [{ kind: 'assistant', blocks: [{ kind: 'text', text: '<!-- skill-router:suggest {"skill":"x","bundle":"y"} -->' }] }] })
+assert.equal(noDesc.length, 1)
+assert.equal(noDesc[0].desc, '')
 
 // 已使用的技能不应再出现在建议里
 const { collectSuggestions } = mod.__internals

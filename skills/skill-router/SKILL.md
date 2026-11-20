@@ -62,10 +62,11 @@ description: 需求拆解 + 技能匹配 + 一次性确认。当用户提出需�
 发现"官方有、本地没有"时，在回复里附一段**对用户不可见**的标记，`技能` 面板会把它渲染成带「复制安装命令」的一行：
 
 ```html
-<!-- skill-router:suggest {"skill":"dsh-skill-badge","bundle":"@deepseek-ai/dsh-experimental-badge-skill-bundle","why":"本地未安装，能给产出物自动加 powered-by 标记"} -->
+<!-- skill-router:suggest {"skill":"dsh-skill-badge","desc":"给文档/PR 等产出物自动加上 powered-by DSH 标记","bundle":"@deepseek-ai/dsh-experimental-badge-skill-bundle","why":"本轮要给文档加标记，本地未安装"} -->
 ```
 
 规则：
+- `desc` 必填：一句简介，让人一眼知道这个技能干什么。取官方原文，别自己编——`plugin_manager list_bundles` 的 `description` 或 npm 搜索结果的 `description` 都行，掐到 40–60 字，不要贴整段。`why` 是"为什么这次需要它"，与 `desc` 分开写。
 - 只在**确认未安装**时打；装好并开始用之后不要再打。
 - 一条技能只打一次；`bundle` 填真正能装的那个包名，填错等于给用户一条坏命令。
 - 面板靠"本轮是否用过该技能"过滤，所以历史里残留的旧标记在你用过该技能后会自动消失；没用过就会一直显示——别乱打。
