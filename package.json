@@ -29,7 +29,9 @@
     "icon.svg",
     "README.md",
     "CHANGELOG.md",
-    "README.zh-CN.md"
+    "README.zh-CN.md",
+    "README.ko.md",
+    "README.ja.md"
   ],
   "dsh": {
     "bundle": {

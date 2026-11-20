@@ -1,12 +1,14 @@
 # dsh-skill-router
 
-[English](README.md) | **简体中文**
+[English](README.md) | **简体中文** | [日本語](README.ja.md) | [한국어](README.ko.md)
 
-一个 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（DSH）bundle：**先判断一个需求该由哪个 skill 来干**，首次问你一次，然后把结论记住。
+> **这个需求该由哪个技能来干？** 判断一次，记住结论，把走过的路径画出来。
+
+[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（DSH）装的技能越来越多，谁也不可能全记住：新手看不出哪个能用，老手也说不准选中的那个到底解不解决问题。
+
+这个 bundle 把那一步判断显式化——拆解、匹配、只确认一次、然后复用——并在对话页放一个**技能**视图，让路径看得见。
 
 属于 [`dsh-plugin`](https://github.com/topics/dsh-plugin) 生态 —— 一个 bundle 里装好技能、面板与安装器。
-
-它解决两个问题：新手面对一堆 skill 不知道选哪个；老手不确定选中的 skill 是否真能解决问题。这个 bundle 把这次判断显式化，然后复用。
 
 ## 包里有什么
 
@@ -88,7 +90,7 @@ node test/render.test.mjs    # 渲染冒烟：布局、评分、Star 链接、�
 打 tag，并把仓库挂到 `dsh-plugin` topic 下：
 
 ```bash
-git tag -a v0.4.1 -m "dsh-skill-router 0.4.1" && git push origin v0.4.1
+git tag -a v0.5.1 -m "dsh-skill-router 0.5.1" && git push origin v0.5.1
 ./scripts/set-topics.sh            # 需要一次 gh auth login 或 GITHUB_TOKEN
 ```
 

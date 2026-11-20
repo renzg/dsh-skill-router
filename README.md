@@ -1,12 +1,14 @@
 # dsh-skill-router
 
-**English** | [简体中文](README.zh-CN.md)
+**English** | [简体中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](README.ko.md)
 
-A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH) bundle that decides **which skill should handle a request**, asks you once, and remembers the answer.
+> **Which skill should handle this?** This bundle answers once, remembers the answer, and shows you the path it took.
+
+[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH) ships more skills than anyone can keep track of: newcomers can't tell which one fits a task, and experienced users can't tell whether the one they picked actually solved it.
+
+This bundle makes that decision explicit — decompose, match, confirm once, reuse — and puts a **Skills** view in the conversation page so the path is visible.
 
 Part of the [`dsh-plugin`](https://github.com/topics/dsh-plugin) ecosystem — skill, panel and installer in one bundle.
-
-Two problems it solves: newcomers cannot tell which of the many installed skills fits a task, and experienced users cannot tell whether the skill they picked actually solves it. This bundle makes the decision explicit, then reuses it.
 
 ## What is in the bundle
 
@@ -88,7 +90,7 @@ See [CHANGELOG.md](CHANGELOG.md) for the version history.
 Tag a release and list the repository under the `dsh-plugin` topic:
 
 ```bash
-git tag -a v0.4.1 -m "dsh-skill-router 0.4.1" && git push origin v0.4.1
+git tag -a v0.5.1 -m "dsh-skill-router 0.5.1" && git push origin v0.5.1
 ./scripts/set-topics.sh            # needs one `gh auth login` or GITHUB_TOKEN
 ```
 
